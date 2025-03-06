@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useForm,SubmitHandler } from "react-hook-form";
 import poppins from "@/font/font";
-import Typist from "react-typist-component";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { AiFillYahoo } from "react-icons/ai";
 import { FaMicrosoft } from "react-icons/fa6";
@@ -52,29 +51,27 @@ export default function SignInPage() {
 
         <div className="h-screen w-1/2 flex flex-col items-center justify-center ml-20 md:ml-0">
           <Image
-            src="/speety_logo.png"
+            src="/logo/logo.png"
             alt="Speety Logo"
             width={180}
-            height={130}
-            className="py-4"
+            height={120}
+            className="mb-[-40px]"
           />
-          <h1 className="text-md text-black">
-            <Typist> Begin the journey with us ...</Typist>
-          </h1>
+
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
-            <button className="bg-[#397367] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
+            <button className="bg-[#437A45] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
               <div className="flex flex-row items-center">
                 <AiFillGoogleCircle className="w-8 h-8 ml-3 text-white" />
                 <p className="ml-5 text-white">Continue with Google</p>
               </div>
             </button>
-            <button className="bg-[#397367] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
+            <button className="bg-[#437A45] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
               <div className="flex flex-row items-center">
                 <AiFillYahoo className="w-8 h-8 ml-4 text-white" />
                 <p className="ml-4 text-white">Continue with Yahoo</p>
               </div>
             </button>
-            <button className="bg-[#397367] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
+            <button className="bg-[#437A45] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
               <div className="flex flex-row items-center">
                 <FaMicrosoft className="w-6 h-6 ml-4 text-white" />
                 <p className="ml-5 text-white">Continue with Microsoft</p>
@@ -107,19 +104,19 @@ export default function SignInPage() {
               />
 
               {errors.password && <p className="text-red-500">Password is required.</p>}
-              <h1 className="mt-1 text-[#397367] text-sm font-bold" onClick={()=>setReset(true)}>
+              <h1 className="mt-1 text-[#437A45] text-sm font-bold" onClick={()=>setReset(true)}>
                 Forgot Password?
               </h1>
               <p id="error_msg" className="text-md text-red-400 font-semibold"></p>
               <button
               type="submit"
-                className="bg-[#397367] text-white mt-2 rounded-md md:h-10 md:w-96 font-bold text-md"
+                className="bg-[#437A45] text-white mt-2 rounded-md md:h-10 md:w-96 font-bold text-md"
               >
                 Continue
               </button>
               <h3 className="mt-2 text-center text-md">
                 Don&apos;t have an account yet?{" "}
-                <a href="/auth/signup" className="text-[#397367] font-bold tracking-tight underline">
+                <a href="/auth/signup" className="text-[#437A45] font-bold tracking-tight underline">
                   Sign up!
                 </a>
               </h3>

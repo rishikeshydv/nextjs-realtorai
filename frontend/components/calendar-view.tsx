@@ -4,54 +4,75 @@ import { useState } from "react"
 import { ChevronLeft, ChevronRight, Search, MoreHorizontal, X, Clock, Users, Link, AlignLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { SiGooglecalendar } from "react-icons/si";
+import { Calendar } from "@/components/ui/calendar"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function CalendarView() {
   const [showAddEvent, setShowAddEvent] = useState(true)
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+
+  const today = new Date();
+
+  const intToMonth: { [key: number]: string } = {
+    0: "January",
+    1: "February",
+    2: "March",
+    3: "April",
+    4: "May",
+    5: "June",
+    6: "July",
+    7: "August",
+    8: "September",
+    9: "October",
+    10: "November",
+    11: "December",
+  }
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="w-64 border-r border-gray-200 p-4 flex flex-col">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center text-white">
-            <span>17</span>
-          </div>
+      {/* Left Sidebar */}
+      <div className="w-72 border-r border-gray-200 p-4 flex flex-col">
+        <div className=" flex items-center gap-2 mb-6 border-b pb-[12px]">
+        <SiGooglecalendar className="w-8 h-8 text-[#437A45]"/>
           <div className="flex-1">
-            <h2 className="font-medium">Waton Calendar</h2>
-            <p className="text-xs text-gray-500">Marketing&apos;s workspace</p>
+            <h2 className="font-medium">Your Calendar</h2>
+            <p className="text-xs text-gray-500">Schedule Workspace</p>
           </div>
-          <ChevronRight className="h-4 w-4 text-gray-400" />
+        </div>
+        {/* calendar */}
+        <div className="pb-6 mb-6 border-b pb-[1.5em]">
+        <Calendar
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        className="rounded-md border"
+      />
         </div>
 
-        <div className="mb-6">
+    {/* my calendars section */}
+        <div className="mb-6 border-b pb-[1.5em]">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium">My Calendars</h3>
             <ChevronRight className="h-4 w-4 text-gray-400" />
           </div>
           <ul className="text-sm space-y-2">
             <li className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+              <Checkbox/>
               <span>Daily Sync</span>
             </li>
             <li className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-pink-400"></div>
+            <Checkbox />
               <span>Birthdays</span>
             </li>
             <li className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <Checkbox />
               <span>Tasks</span>
             </li>
           </ul>
         </div>
 
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium">Favorites</h3>
-            <ChevronRight className="h-4 w-4 text-gray-400" />
-          </div>
-        </div>
-
+{/* categories section */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium">Categories</h3>
@@ -72,23 +93,14 @@ export default function CalendarView() {
             </li>
           </ul>
         </div>
-
-        <div className="mt-auto">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-            <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-            <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-            <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-          </div>
-        </div>
       </div>
 
-      {/* Main Content */}
+      {/* Right Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold">September 2023</h1>
+            <h1 className="text-xl font-semibold">{intToMonth[ today.getMonth()]}&nbsp;{today.getFullYear()}</h1>
             <button className="text-sm bg-gray-100 px-2 py-1 rounded">Today</button>
             <div className="flex items-center">
               <button className="p-1">
@@ -109,10 +121,10 @@ export default function CalendarView() {
             <button className="p-1">
               <MoreHorizontal className="h-4 w-4" />
             </button>
-            <div className="flex border-l border-gray-200 pl-2 ml-2">
-              <button className="px-2 py-1 text-xs">Day</button>
-              <button className="px-2 py-1 text-xs bg-gray-100 rounded">Week</button>
-              <button className="px-2 py-1 text-xs">Month</button>
+            <div className="flex bg-gray-100 border-l border-gray-200 pl-2 ml-2 rounded-xl p-1">
+              <button className="px-2 py-1 text-sm">Day</button>
+              <button className="px-2 py-1 text-sm bg-white rounded">Week</button>
+              <button className="px-2 py-1 text-sm">Month</button>
             </div>
           </div>
         </div>
@@ -122,7 +134,7 @@ export default function CalendarView() {
           {/* Days of Week */}
           <div className="flex border-b border-gray-200">
             <div className="w-16 border-r border-gray-200 p-2 text-center">
-              <div className="text-xs text-gray-500">GMT+7</div>
+              <div className="text-xs text-gray-500">TIME</div>
             </div>
             <div className="flex-1 grid grid-cols-6">
               <div className="border-r border-gray-200 p-2">
