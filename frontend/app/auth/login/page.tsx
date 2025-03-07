@@ -40,7 +40,7 @@ export default function SignInPage() {
     <div className={poppins.className}>
       <div className="flex">
         <div className={`bg-gray-800 h-screen w-1/2 hidden md:block`}>
-          <img src="/loginFamily.jpg" alt="alt" className="md:w-full md:h-full lg:w-auto lg:h-auto"/>
+          <img src="/imgs/loginFamily.jpg" alt="alt" className="md:w-full md:h-full lg:w-auto lg:h-auto"/>
         </div>
         {
           reset && <ResetEmail setReset={setReset} setResetDone={setResetDone}/>

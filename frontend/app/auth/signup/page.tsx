@@ -1,55 +1,36 @@
 "use client";
-import { useEffect, useState} from "react";
+import { useState} from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import poppins from "@/font/font";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { AiFillYahoo } from "react-icons/ai";
 import { FaMicrosoft } from "react-icons/fa6";
 import Image from "next/image";
+import axios from "axios";
+import SignupUser from "@/types/user";
 
-interface SignupData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 
 export default function SignupPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupData>();
+  } = useForm<SignupUser>();
 
   const [errorMsg, setErrorMsg] = useState<string>("");
 
-  //just to avoid errors
-  useEffect(() => {
-    console.log(errorMsg)
-  }, [errorMsg]);
 
-  const onSubmit: SubmitHandler<SignupData> =  async (data) => {
+  const onSubmit: SubmitHandler<SignupUser> =  async (data) => {
     try {
-      const {
-        name,
-        email,
-        password,
-        confirmPassword,
-      } = data;
-
-
-      if (password !== confirmPassword) {
-        // show message to user that passwords do not match
-        setErrorMsg("Passwords do not match");
-        return;
-      }
-
-      console.log(name,email)
-
-    } catch (error) {
-      console.log(error);
-
-      setErrorMsg("Something went wrong. Please try again later.");
+     const res = await axios.post("http://localhost:5002/api/v1/signup", {
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        confirm_password: data.confirm_password,
+      })
+      setErrorMsg(res.data);
+    } catch (error:unknown) {
+      setErrorMsg(String(error));
     }
 
 }
@@ -150,15 +131,15 @@ export default function SignupPage() {
                 <input
                   type="password"
                   required
-                  {...register("confirmPassword")}
+                  {...register("confirm_password")}
                   className="rounded-md bg-gray-200 h-10 w-72 text-md px-4"
                 />
-                {errors.confirmPassword && (
+                {errors.confirm_password && (
                   <p className="text-red-500">Please confirm your password.</p>
                 )}
               </div>
             </div>
-            <p className="px-1 py-2 text-sm"> • Password must be atleast 6 characters.</p>
+            <p className="px-1 py-2 text-sm">{errorMsg}</p>
             <div className="flex items-center justify-center mr-20">
             <button
               type="submit"
