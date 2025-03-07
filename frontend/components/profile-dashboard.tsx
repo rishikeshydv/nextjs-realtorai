@@ -17,11 +17,23 @@ import { SubscriptionSection } from "@/components/subscription-section"
 import { ConnectedAppsSection } from "@/components/connected-apps-section"
 import { AIPreferencesSection } from "@/components/ai-preferences-section"
 import { SecuritySection } from "@/components/security-section"
-import { User, CreditCard, Link, Bot, Shield, LogOut } from "lucide-react"
+import { User, CreditCard, Link, Bot, Shield,LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+
 
 export function ProfileDashboard() {
   const [activeSection, setActiveSection] = useState("profile")
+  const router = useRouter()
+  const logOut = async() => {
+    axios.get("http://localhost:5002/api/v1/logout")
+    .then((res) => {
+      console.log(res.data);
+      router.push("/auth/login");
+    }
+    )
+  }
 
   const renderSection = () => {
     switch (activeSection) {
@@ -97,7 +109,7 @@ export function ProfileDashboard() {
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter className="border-t border-gray-200 dark:border-gray-800 p-4">
-            <Button variant="outline" className="w-full justify-start bg-[#437A45] text-white">
+            <Button variant="outline" className="w-full justify-start bg-[#437A45] text-white" onClick={logOut}>
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </Button>

@@ -3,6 +3,11 @@ type SignupUser = {
     name: string;
     password: string;
     confirm_password: string;
-}
+};
 
-export default SignupUser;
+type SignInData = {
+    email: string;
+    password: string;
+};
+
+export type { SignupUser, SignInData };

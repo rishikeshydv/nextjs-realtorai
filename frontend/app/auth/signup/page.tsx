@@ -7,7 +7,7 @@ import { AiFillYahoo } from "react-icons/ai";
 import { FaMicrosoft } from "react-icons/fa6";
 import Image from "next/image";
 import axios from "axios";
-import SignupUser from "@/types/user";
+import { SignupUser } from "@/types/user";
 
 
 export default function SignupPage() {

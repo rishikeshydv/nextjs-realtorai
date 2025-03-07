@@ -9,26 +9,33 @@ import { FaMicrosoft } from "react-icons/fa6";
 import Image from "next/image";
 import PasswordReset from "@/components/ResetThankYou";
 import ResetEmail from "@/components/ResetEmail";
-interface SignInData {
-  email: string;
-  password: string;
-}
+import { SignInData } from "@/types/user";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 export default function SignInPage() {
+  const router = useRouter();
   const [reset, setReset] = useState<boolean>(false);
   const [resetDone, setResetDone] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   
   const { register, handleSubmit,formState: { errors } } = useForm<SignInData>();
-
 
   const onSubmit:SubmitHandler<SignInData> = async (data) => {
     const { email, password } = data;
 
     try {
       if (email === "" || password === "") {
-        throw new Error("Please enter email and password");
-
+        setErrorMsg("Email and Password are required.");
+        return;
       }
-
+      const res = await axios.post("http://localhost:5002/api/v1/login", data,{
+        withCredentials: true,
+      });
+      if (res.data === "User Successfully Logged In.") {
+        router.push(`/dashboard/${data.email}`);
+        return;
+      }
+      setErrorMsg(res.data);
 
     } catch (error) {
       console.log(error);
@@ -107,6 +114,7 @@ export default function SignInPage() {
               <h1 className="mt-1 text-[#437A45] text-sm font-bold" onClick={()=>setReset(true)}>
                 Forgot Password?
               </h1>
+              {errorMsg && <p className="text-red-500">{errorMsg}</p>}
               <p id="error_msg" className="text-md text-red-400 font-semibold"></p>
               <button
               type="submit"
