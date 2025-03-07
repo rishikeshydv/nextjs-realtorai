@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Search, Plus, Settings, Home, RefreshCw, Database } from "lucide-react"
+import { Search, Plus, Settings, Home, RefreshCw, Database, NotebookPen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -99,7 +99,7 @@ export function DataModelDashboard() {
       {/* Sidebar */}
       <div className="w-16 border-r bg-background flex flex-col items-center py-4 gap-6">
         <div className="p-2 rounded-md">
-          <div className="w-8 h-8 bg-gray-200 rounded-md"></div>
+            <img src="/logo/symbol.png" alt="" className="w-12 h-7 rounded-md"/>
         </div>
         <div className="flex flex-col gap-4">
           <button className="p-2 rounded-md hover:bg-accent">
@@ -110,9 +110,6 @@ export function DataModelDashboard() {
           </button>
           <button className="p-2 rounded-md hover:bg-accent">
             <RefreshCw className="w-5 h-5 text-muted-foreground" />
-          </button>
-          <button className="p-2 rounded-md bg-accent">
-            <Database className="w-5 h-5 text-primary" />
           </button>
         </div>
         <div className="mt-auto">
@@ -132,12 +129,12 @@ export function DataModelDashboard() {
         {/* Header */}
         <div className="p-4 border-b flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Database className="w-5 h-5 text-emerald-600" />
-            <h1 className="font-medium">All models</h1>
+            <NotebookPen className="w-5 h-5 text-emerald-600" />
+            <h1 className="font-semibold text-lg">Activity Logbook</h1>
           </div>
           <Button className="bg-emerald-500 hover:bg-emerald-600">
             <Plus className="w-4 h-4 mr-2" />
-            Add model
+            Add a Log
           </Button>
         </div>
 
