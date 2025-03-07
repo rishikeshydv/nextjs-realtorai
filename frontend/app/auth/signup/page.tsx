@@ -26,7 +26,7 @@ export default function SignupPage() {
   //just to avoid errors
   useEffect(() => {
     console.log(errorMsg)
-  }, []);
+  }, [errorMsg]);
 
   const onSubmit: SubmitHandler<SignupData> =  async (data) => {
     try {

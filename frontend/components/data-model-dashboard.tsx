@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search, Plus, Settings, Home, RefreshCw, Database, NotebookPen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -93,6 +93,11 @@ export function DataModelDashboard() {
       lastUpdated: "Jan 23, 2024 at 8:34 AM",
     },
   ])
+
+  useEffect(() => {
+
+    setModels(models)
+  }, [])
 
   return (
     <div className="flex h-screen">
