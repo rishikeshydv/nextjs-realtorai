@@ -30,6 +30,7 @@ export function ProfileDashboard() {
     axios.get("http://localhost:5002/api/v1/logout")
     .then((res) => {
       console.log(res.data);
+      localStorage.removeItem("email");
       router.push("/auth/login");
     }
     )

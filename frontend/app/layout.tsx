@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import poppins from "@/font/font";
-
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +18,8 @@ export default function RootLayout({
       <body
         className={`${poppins.className} antialiased`}
       >
-        {children}
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

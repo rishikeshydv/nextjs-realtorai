@@ -31,7 +31,13 @@ export default function SignInPage() {
       const res = await axios.post("http://localhost:5002/api/v1/login", data,{
         withCredentials: true,
       });
-      if (res.data === "User Successfully Logged In.") {
+
+      console.log(res.data);
+
+      if (res.data.message === "User Successfully Logged In.") {
+        //save the email in local storage
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("name", res.data.name);
         router.push(`/dashboard/${data.email}`);
         return;
       }
