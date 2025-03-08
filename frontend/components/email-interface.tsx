@@ -57,9 +57,26 @@ export default function EmailInterface() {
     null
   );
 
+  //AI generated response for ClickedEmails
+  const [aiGeneratedResponse, setAiGeneratedResponse] = React.useState<string| null>(null);
+  useEffect(() => {
+    if (clickedEmail) {
+      axios
+        .post("http://localhost:5002/api/v1/airesponse", clickedEmail)
+        .then((res) => {
+          setAiGeneratedResponse(res.data.response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [clickedEmail]);
+
+  console.log(aiGeneratedResponse);
+
   //compose email UI
   const [composeOpen, setComposeOpen] = useState(false);
-  const [replyOpen, setReplyOpen] = useState(false)
+  const [replyOpen, setReplyOpen] = useState(false);
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
   const [bcc, setBcc] = useState("");
@@ -95,7 +112,7 @@ export default function EmailInterface() {
       to: clickedEmail?.from_email || "",
       cc: "",
       bcc: "",
-      subject: "Re: "+clickedEmail?.subject || "",
+      subject: "Re: " + clickedEmail?.subject || "",
       body: body,
     };
     axios
@@ -766,51 +783,206 @@ export default function EmailInterface() {
 
         {/* Reply Email Dialog */}
         <Dialog open={replyOpen} onOpenChange={setReplyOpen}>
-          <DialogContent className="sm:max-w-[700px]">
-            <DialogHeader>
+          <DialogContent className="sm:max-w-[900px] p-0 overflow-hidden">
+            <DialogHeader className="p-6 pb-2">
               <DialogTitle>Reply to Email</DialogTitle>
             </DialogHeader>
 
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-[80px_1fr] items-center">
-                <Label htmlFor="reply-to" className="text-right mr-4">
-                  To:
-                </Label>
-                <Input
-                  id="reply-to"
-                  defaultValue={`${clickedEmail?.from_email}`}
-                />
+            <div className="grid grid-cols-[300px_1fr] h-[600px]">
+              {/* Left Column - AI Suggestions */}
+              <div className="bg-purple-50 p-6 border-r border-purple-100 overflow-y-auto">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="bg-purple-600 text-white p-1 rounded-full">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M12 8V16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M8 12H16"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="font-medium">AI Suggested Replies</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    className="w-full bg-white p-3 rounded-lg text-sm border border-purple-200 hover:bg-purple-100 transition-colors text-left"
+                    onClick={() => {
+                      const textarea = document.getElementById(
+                        "reply-body"
+                      ) as HTMLTextAreaElement;
+                      if (textarea) {
+                        textarea.value =
+                          "Thanks for sharing about Julie's experience with Dappr! It's great to hear she's enjoying the platform. I'd love to hear more about her specific use case.\n\n" +
+                          textarea.value;
+                        textarea.focus();
+                      }
+                    }}
+                  >
+                    <p className="font-medium mb-1">
+                      Thanks for sharing about Julie&apos;s experience!
+                    </p>
+                    <p className="text-gray-600">
+                      It&apos;s great to hear she&apos;s enjoying the platform.
+                      I&apos;d love to hear more about her specific use case.
+                    </p>
+                  </button>
+
+                  <button
+                    className="w-full bg-white p-3 rounded-lg text-sm border border-purple-200 hover:bg-purple-100 transition-colors text-left"
+                    onClick={() => {
+                      const textarea = document.getElementById(
+                        "reply-body"
+                      ) as HTMLTextAreaElement;
+                      if (textarea) {
+                        textarea.value =
+                          "That's fantastic feedback! Would Julie be interested in being featured in our customer success stories? We're always looking for great examples of how Dappr is helping businesses succeed.\n\n" +
+                          textarea.value;
+                        textarea.focus();
+                      }
+                    }}
+                  >
+                    <p className="font-medium mb-1">
+                      Feature Julie in our success stories?
+                    </p>
+                    <p className="text-gray-600">
+                      Would Julie be interested in being featured in our
+                      customer success stories? We&apos;re always looking for
+                      great examples.
+                    </p>
+                  </button>
+
+                  <button
+                    className="w-full bg-white p-3 rounded-lg text-sm border border-purple-200 hover:bg-purple-100 transition-colors text-left"
+                    onClick={() => {
+                      const textarea = document.getElementById(
+                        "reply-body"
+                      ) as HTMLTextAreaElement;
+                      if (textarea) {
+                        textarea.value =
+                          "I'm glad to hear Julie is having a positive experience with Dappr. Let's schedule a call to discuss how we can support her business further and ensure she's getting the most out of our platform.\n\n" +
+                          textarea.value;
+                        textarea.focus();
+                      }
+                    }}
+                  >
+                    <p className="font-medium mb-1">Schedule a support call</p>
+                    <p className="text-gray-600">
+                      Let&apos;s schedule a call to discuss how we can support
+                      Julie&apos;s business further and ensure she&apos;s
+                      getting the most out of our platform.
+                    </p>
+                  </button>
+
+                  <button
+                    className="w-full bg-white p-3 rounded-lg text-sm border border-purple-200 hover:bg-purple-100 transition-colors text-left"
+                    onClick={() => {
+                      const textarea = document.getElementById(
+                        "reply-body"
+                      ) as HTMLTextAreaElement;
+                      if (textarea) {
+                        textarea.value =
+                          "This is exactly the kind of feedback we love to hear! I'll share Julie's experience with our product team. If she has any specific feature requests or suggestions for improvement, please let us know.\n\n" +
+                          textarea.value;
+                        textarea.focus();
+                      }
+                    }}
+                  >
+                    <p className="font-medium mb-1">
+                      Share with our product team
+                    </p>
+                    <p className="text-gray-600">
+                      I&apos;ll share Julie&apos;s experience with our product
+                      team. If she has any specific feature requests or
+                      suggestions, please let us know.
+                    </p>
+                  </button>
+
+                  <button
+                    className="w-full bg-white p-3 rounded-lg text-sm border border-purple-200 hover:bg-purple-100 transition-colors text-left"
+                    onClick={() => {
+                      const textarea = document.getElementById(
+                        "reply-body"
+                      ) as HTMLTextAreaElement;
+                      if (textarea) {
+                        textarea.value =
+                          "Thanks for the update on Julie! We should consider offering a referral program for customers like her who are enthusiastic about Dappr and already recommending it to friends.\n\n" +
+                          textarea.value;
+                        textarea.focus();
+                      }
+                    }}
+                  >
+                    <p className="font-medium mb-1">
+                      Consider a referral program
+                    </p>
+                    <p className="text-gray-600">
+                      We should consider offering a referral program for
+                      customers like Julie who are enthusiastic about Dappr and
+                      already recommending it.
+                    </p>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-[80px_1fr] items-center">
-                <Label htmlFor="reply-cc" className="text-right mr-4">
-                  Cc:
-                </Label>
-                <Input
-                  id="reply-cc"
-                  defaultValue=""
-                />
-              </div>
+              {/* Right Column - Email Form */}
+              <div className="p-6 overflow-y-auto">
+                <div className="space-y-4">
+                  <div className="grid grid-cols-[80px_1fr] items-center">
+                    <Label htmlFor="reply-to" className="text-right mr-4">
+                      To:
+                    </Label>
+                    <Input
+                      id="reply-to"
+                      defaultValue={`${clickedEmail?.from_email}`}
+                    />
+                  </div>
 
-              <Separator />
+                  <div className="grid grid-cols-[80px_1fr] items-center">
+                    <Label htmlFor="reply-cc" className="text-right mr-4">
+                      Cc:
+                    </Label>
+                    <Input id="reply-cc" defaultValue="" />
+                  </div>
 
-              <div className="grid grid-cols-[80px_1fr] items-center">
-                <Label htmlFor="reply-subject" className="text-right mr-4">
-                  Subject:
-                </Label>
-                <Input
-                  id="reply-subject"
-                  defaultValue={`Re: ${clickedEmail?.subject}`}
-                  
-                />
-              </div>
 
-              <Textarea
-                placeholder="Write your reply here..."
-                className="min-h-[200px]"
+                  <div className="grid grid-cols-[80px_1fr] items-center">
+                    <Label htmlFor="reply-subject" className="text-right mr-4">
+                      Subject:
+                    </Label>
+                    <Input
+                      id="reply-subject"
+                      defaultValue={`Re: ${clickedEmail?.subject}`}
+                    />
+                  </div>
 
-                onChange={(e) => setBody(e.target.value)}
-                defaultValue={`
+                  <Textarea
+                    placeholder="Write your reply here..."
+                    id="reply-body"
+                    className="min-h-[150px]"
+                    onChange={(e) => setBody(e.target.value)}
+                    defaultValue={`
 
 ----- Original Message -----
 From: ${clickedEmail?.from_name}
@@ -820,36 +992,42 @@ Cc:
 Subject: ${clickedEmail?.subject}
 
 ${clickedEmail?.body}
-`
-}
-              />
+`}
+                  />
 
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon">
-                  <Paperclip className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <ImageIcon className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Link className="h-4 w-4" />
-                </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon">
+                      <Paperclip className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <ImageIcon className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon">
+                      <Link className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setReplyOpen(false)}
+                    >
+                      Save as Draft
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        SendReply();
+                        toast("Congratulations 🎉", {
+                          description: "Your email was sent successfully",
+                        });
+                      }}
+                    >
+                      Send
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setReplyOpen(false)}>
-                Save as Draft
-              </Button>
-              <Button
-                                onClick={() => {
-                                  SendReply();
-                                  toast("Congratulations 🎉", {
-                                    description: "Your email was sent successfully",
-                                  });
-                                }}
-              >Send</Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
