@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useForm,SubmitHandler } from "react-hook-form";
-import poppins from "@/font/font";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { AiFillYahoo } from "react-icons/ai";
 import { FaMicrosoft } from "react-icons/fa6";
@@ -12,6 +11,9 @@ import ResetEmail from "@/components/ResetEmail";
 import { SignInData } from "@/types/user";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { onest } from "@/font/font";
+import Link from "next/link";
+
 export default function SignInPage() {
   const router = useRouter();
   const [reset, setReset] = useState<boolean>(false);
@@ -50,7 +52,7 @@ export default function SignInPage() {
   };
 
   return (
-    <div className={poppins.className}>
+    <div className={onest.className}>
       <div className="flex">
         <div className={`bg-gray-800 h-screen w-1/2 hidden md:block`}>
           <img src="/imgs/loginFamily.jpg" alt="alt" className="md:w-full md:h-full lg:w-auto lg:h-auto"/>
@@ -63,13 +65,15 @@ export default function SignInPage() {
         }
 
         <div className="h-screen w-1/2 flex flex-col items-center justify-center ml-20 md:ml-0">
-          <Image
+        <Link href="/">
+        <Image
             src="/logo/logo.png"
             alt="Speety Logo"
-            width={180}
-            height={120}
-            className="mb-[-40px]"
+            width={150}
+            height={90}
+            className="mb-6"
           />
+        </Link>
 
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center">
             <button className="bg-[#437A45] rounded-xl w-72 h-10 mt-2 text-lg font-bold">

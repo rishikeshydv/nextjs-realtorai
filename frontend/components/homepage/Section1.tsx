@@ -13,7 +13,7 @@ export default function Section1() {
     { name: "Dashboard", href: "/dashboard" },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
-    { name: "Logbook", href: "/logbook" },
+    { name: "Logbook", href: "/logs" },
   ];
 
   const PointImgUrls = [
@@ -105,7 +105,7 @@ export default function Section1() {
                 size="sm"
                 className="bg-[#437A45] text-white"
               >
-                <Link href="/login">Login</Link>
+                <Link href="/auth/login">Login</Link>
               </Button>
             </div>
 

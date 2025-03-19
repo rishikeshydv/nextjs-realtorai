@@ -1,14 +1,14 @@
 "use client";
 import { useState} from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import poppins from "@/font/font";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { AiFillYahoo } from "react-icons/ai";
 import { FaMicrosoft } from "react-icons/fa6";
 import Image from "next/image";
 import axios from "axios";
 import { SignupUser } from "@/types/user";
-
+import { onest } from "@/font/font";
+import Link from "next/link";
 
 export default function SignupPage() {
   const {
@@ -36,19 +36,22 @@ export default function SignupPage() {
 }
 
   return (
-    <div className={poppins.className}>
-      <img src="/adobe/6.jpeg" alt="img" className="w-screen h-screen hidden md:block"/>
+
+<div className={`${onest.className}`}>
+      {/* <img src="/adobe/6.jpeg" alt="img" className="w-screen h-screen hidden md:block"/> */}
       <div
-        className={`md:fixed md:bottom-14 md:top-14 md:left-10 md:right-10 lg:bottom-14 lg:top-14 lg:left-1/4 lg:right-1/4 flex flex-col items-center justify-center bg-gray-200/80 shadow-sm rounded-2xl py-4`}
+        className={`md:fixed md:bottom-14 md:top-14 md:left-10 md:right-10 lg:bottom-14 lg:top-14 lg:left-1/4 lg:right-1/4 flex flex-col items-center justify-center bg-gray-100/40 shadow-sm rounded-2xl py-4`}
       >
         {/* This div is for the right side of the page */}
+        <Link href={"/"}>
         <Image
           src="/logo/logo.png"
           alt="Speety Logo"
-          width={160}
+          width={140}
           height={100}
-          className="mb-[-30px]"
+          className="mb-6"
         />
+        </Link>
         {/* <h1 className="text-xl text-gray-400"><Typist> Begin the journey with us ...</Typist></h1> */}
         <button className="bg-[#437A45] rounded-xl w-72 h-10 mt-2 text-lg font-bold">
               <div className="flex flex-row items-center">
@@ -160,5 +163,6 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
+
   );
 }

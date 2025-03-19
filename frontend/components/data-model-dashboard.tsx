@@ -137,7 +137,7 @@ export function DataModelDashboard() {
             <NotebookPen className="w-5 h-5 text-emerald-600" />
             <h1 className="font-semibold text-lg">Activity Logbook</h1>
           </div>
-          <Button className="bg-emerald-500 hover:bg-emerald-600">
+          <Button className="bg-[#437A45]">
             <Plus className="w-4 h-4 mr-2" />
             Add a Log
           </Button>
