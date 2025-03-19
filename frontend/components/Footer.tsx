@@ -52,7 +52,7 @@ export default function Footer() {
     <img src="/googleplay.svg" alt="appstore" onClick={()=>router.push("/503")}/>
   </div>
 <h1 className='text-center text-xs mt-6 mb-2 xl:mt-0 2xl:mt-0'>
-   &copy; 2024 Scail. All rights reserved.
+   &copy; 2025 Realtor AI. All rights reserved.
   </h1>
   <div className='mt-6'>
     <img src="/footer.png" alt="footer" />
