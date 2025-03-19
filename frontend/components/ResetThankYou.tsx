@@ -6,13 +6,13 @@
 "use client"
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import poppins from "@/font/font"
 import { useRouter } from "next/navigation"
+import { onest } from "@/font/font"
 
 export default function PasswordReset() {
   const router = useRouter()
   return (
-    <div className={poppins.className}>
+    <div className={onest.className}>
     <Dialog defaultOpen>
       <DialogContent className="sm:max-w-[425px]">
         <div className="flex flex-col items-center justify-center gap-4 py-8">

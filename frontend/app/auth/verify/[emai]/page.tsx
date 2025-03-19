@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import poppins from "@/font/font";
+import { onest } from "@/font/font";
+
 import Image from "next/image";
 import Link from "next/link";
 export default function VerificationPage() {
   return (
-    <div className={poppins.className}>
+    <div className={onest.className}>
       <div
         className={`fixed bottom-16 top-16 left-1/4 right-1/4 flex flex-col items-center justify-center bg-gray-100 shadow-sm rounded-2xl`}
       >

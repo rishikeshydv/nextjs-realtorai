@@ -1,16 +1,23 @@
+"use client";
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Search } from "lucide-react";
+import { Menu, Search, LogOut } from "lucide-react";
 import PointProps from "./PointProps";
 import WhyProps from "./WhyProps";
-
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
 export default function Section1() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  useEffect(() => {
+    setUserEmail(localStorage.getItem("email"));
+  }, []);
   const navItems = [
-    { name: "Dashboard", href: "/dashboard" },
+    { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
     { name: "Logbook", href: "/logs" },
@@ -64,6 +71,19 @@ export default function Section1() {
   ];
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
+
+
+  //logout
+  const logout = async () => {
+    const res = await axios.get("http://localhost:5002/api/v1/logout")
+    if (res.data.message === "User Successfully Logged Out.") {
+      localStorage.removeItem("email");
+      localStorage.removeItem("name");
+      setUserEmail(null);
+
+    }
+    window.location.href = "/auth/login";
+  }
   return (
     <main>
       <section className="bg-[url(/Pattern.png)] bg-no-repeat">
@@ -98,16 +118,39 @@ export default function Section1() {
             </nav>
 
             {/* Desktop login button */}
-            <div className="absolute right-5 flex items-center hidden md:flex ml-auto">
-              <Button
-                asChild
-                variant="outline"
-                size="sm"
-                className="bg-[#437A45] text-white"
-              >
-                <Link href="/auth/login">Login</Link>
-              </Button>
-            </div>
+            {userEmail ? (
+              <div className="absolute right-5 flex space-x-2 items-center md:flex ml-auto">
+                <Link href="/dashboard">
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </Link>
+
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="bg-[#437A45] text-white rounded-full p-[1.2em]"
+                  onClick={logout}
+                >
+                  <div>
+                    <LogOut />
+                  </div>
+                </Button>
+              </div>
+            ) : (
+              <div className="absolute right-5 flex items-center md:flex ml-auto">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="bg-[#437A45] text-white"
+                >
+                  <Link href="/auth/login">Login</Link>
+                </Button>
+              </div>
+            )}
 
             {/* Mobile navigation */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -230,33 +273,39 @@ export default function Section1() {
         </div>
         {/* section 5 */}
         <div className="min-h-[85vh] flex items-center justify-center bg-white">
-      <div className="w-full max-w-6xl p-8 md:p-12 rounded-xl bg-[#437A45] text-white">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          <h1 className="text-4xl md:text-7xl font-bold tracking-tight">Get Started Today</h1>
+          <div className="w-full max-w-6xl p-8 md:p-12 rounded-xl bg-[#437A45] text-white">
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h1 className="text-4xl md:text-7xl font-bold tracking-tight">
+                Get Started Today
+              </h1>
 
-          <p className="text-lg md:text-xl opacity-70">Enter a property address & uncover its full history!</p>
+              <p className="text-lg md:text-xl opacity-70">
+                Enter a property address & uncover its full history!
+              </p>
 
-          <div className="mt-8 relative">
-            <div className="flex">
-              <input
-                type="text"
-                placeholder="Enter your address, City, ZIP"
-                className="w-full px-4 py-3 rounded-l-lg text-gray-800 focus:outline-none bg-white"
-                aria-label="Property address search"
-              />
-              <button
-                className="bg-[#517a46] hover:bg-[#446539] transition-colors p-3 rounded-r-lg border-2 border-white flex items-center justify-center"
-                aria-label="Search"
-              >
-                <Search className="h-6 w-6 text-white" />
-              </button>
+              <div className="mt-8 relative">
+                <div className="flex">
+                  <input
+                    type="text"
+                    placeholder="Enter your address, City, ZIP"
+                    className="w-full px-4 py-3 rounded-l-lg text-gray-800 focus:outline-none bg-white"
+                    aria-label="Property address search"
+                  />
+                  <button
+                    className="bg-[#517a46] hover:bg-[#446539] transition-colors p-3 rounded-r-lg border-2 border-white flex items-center justify-center"
+                    aria-label="Search"
+                  >
+                    <Search className="h-6 w-6 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              <p className="text-lg md:text-xl pt-4">
+                Get a Property Analytics.
+              </p>
             </div>
           </div>
-
-          <p className="text-lg md:text-xl pt-4">Get a Property Analytics.</p>
         </div>
-      </div>
-    </div>
       </section>
     </main>
   );
