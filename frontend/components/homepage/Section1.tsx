@@ -17,7 +17,8 @@ export default function Section1() {
     setUserEmail(localStorage.getItem("email"));
   }, []);
   const navItems = [
-    { name: "Dashboard", href: `/dashboard/${userEmail}` },
+    { name: "Insights", href: "/insights" },
+   // { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
     { name: "Logbook", href: "/logs" },
@@ -120,7 +121,7 @@ export default function Section1() {
             {/* Desktop login button */}
             {userEmail ? (
               <div className="absolute right-5 flex space-x-2 items-center md:flex ml-auto">
-                <Link href="/dashboard">
+                <Link href={`/dashboard/${userEmail}`}>
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>CN</AvatarFallback>
