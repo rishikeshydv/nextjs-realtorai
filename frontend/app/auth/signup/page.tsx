@@ -38,6 +38,11 @@ export default function SignupPage() {
   return (
 
 <div className={`${onest.className}`}>
+<Link href="/">
+<div className="bg-gray-100 text-gray-700 rounded-r-2xl absolute left-0 top-4 px-4 py-2 text-md shadow-md hover:bg-gray-200 transition-colors cursor-pointer">
+  Return to home
+</div>
+</Link>
       {/* <img src="/adobe/6.jpeg" alt="img" className="w-screen h-screen hidden md:block"/> */}
       <div
         className={`md:fixed md:bottom-14 md:top-14 md:left-10 md:right-10 lg:bottom-14 lg:top-14 lg:left-1/4 lg:right-1/4 flex flex-col items-center justify-center bg-gray-100/40 shadow-sm rounded-2xl py-4`}

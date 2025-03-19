@@ -53,6 +53,13 @@ export default function SignInPage() {
 
   return (
     <div className={onest.className}>
+      <Link href="/">
+<div className="bg-gray-100 text-gray-700 rounded-l-2xl absolute right-0 top-4 px-4 py-2 text-md shadow-md hover:bg-gray-200 transition-colors cursor-pointer">
+  Return to home
+</div>
+</Link>
+
+
       <div className="flex">
         <div className={`bg-gray-800 h-screen w-1/2 hidden md:block`}>
           <img src="/imgs/loginFamily.jpg" alt="alt" className="md:w-full md:h-full lg:w-auto lg:h-auto"/>
