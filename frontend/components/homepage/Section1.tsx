@@ -89,7 +89,7 @@ export default function Section1() {
     <main>
       <section className="bg-[url(/Pattern.png)] bg-no-repeat">
         {/* header */}
-        <header className="sticky top-0 z-50 mt-[1em] w-full">
+        <header className="top-0 z-50 mt-[1em] w-full">
           <div className="container flex h-16 items-center">
             <div className="mr-4 px-6 flex">
               <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -210,7 +210,7 @@ export default function Section1() {
                 size="lg"
                 className="text-white bg-[#437A45] p-6 text-md"
               >
-                <Link href="/register">Get Started</Link>
+                <Link href="/auth/login">Get Started</Link>
               </Button>
             </div>
           </div>

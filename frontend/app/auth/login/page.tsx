@@ -13,6 +13,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { onest } from "@/font/font";
 import Link from "next/link";
+import { IoEye } from "react-icons/io5";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -126,6 +127,9 @@ export default function SignInPage() {
                 {...register("password")}
                 className="rounded-md bg-gray-200 md:h-10 md:w-96 px-4 text-sm"
               />
+              <div>
+
+              </div>
 
               {errors.password && <p className="text-red-500">Password is required.</p>}
               <h1 className="mt-1 text-[#437A45] text-sm font-bold" onClick={()=>setReset(true)}>
