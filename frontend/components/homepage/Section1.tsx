@@ -29,11 +29,11 @@ export default function Section1() {
     "/homepage/investment.png",
     "/homepage/pay.png",
   ];
-  const PointTitles = ["Sell Smarter", "Invest Smarter", "Pay Smarter"];
+  const PointTitles = ["Sell Smarter", "Invest Smarter", "Decide Smarter"];
   const PointDescriptions = [
-    "Find the best properties",
-    "Invest in the best properties",
-    "Pay for the best properties",
+    "Leverage AI to sell properties at the best value",
+    "Make data-driven investment decisions with AI insights",
+    "Use AI-powered analytics to optimize your real estate choices",
   ];
 
   const WhyImgUrls = [
@@ -87,74 +87,67 @@ export default function Section1() {
   }
   return (
     <main>
-      <section className="bg-[url(/Pattern.png)] bg-no-repeat">
+      <section className="bg-[url(/Pattern.png)] 2xl:bg-cover 2xl:bg-center">
         {/* header */}
-        <header className="top-0 z-50 mt-[1em] w-full">
-          <div className="container flex h-16 items-center">
-            <div className="mr-4 px-6 flex">
-              <Link href="/" className="mr-6 flex items-center space-x-2">
-                <img src="/logo/logo.png" alt="" className="h-auto w-[5em]" />
-              </Link>
+        <header className="w-full py-4 px-6 flex items-center justify-between">
+      {/* Logo */}
+      <Link href="/" className="flex items-center space-x-2">
+      <img src="/logo/logo.png" alt="" className="h-auto w-[5em]" />
+      </Link>
+
+      {/* Navigation */}
+      <nav className="hidden md:flex space-x-4">
+      <ul className="flex gap-6 justify-center">
+    {navItems.map((item) => (
+      <li key={item.name}>
+        <Link
+          href={item.href}
+          className={cn(
+            "text-md font-medium transition-colors hover:text-primary",
+            pathname === item.href
+              ? "text-primary"
+              : "text-muted-foreground"
+          )}
+        >
+          {item.name}
+        </Link>
+      </li>
+    ))}
+  </ul>
+      </nav>
+
+      {/* Login Button */}
+      {
+        userEmail ? (
+          <div className="flex space-x-2 items-center">
+          <Link href={`/dashboard/${userEmail}`}>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
+
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="bg-[#437A45] text-white rounded-full p-[1.2em]"
+            onClick={logout}
+          >
+            <div>
+              <LogOut />
             </div>
+          </Button>
+        </div>
+        ):(
+          <Button variant="outline" className="bg-[#437A45] text-white">
+          <Link href="/auth/login">Login</Link>
+          </Button>
 
-            {/* Desktop navigation */}
-            <nav className="hidden md:flex md:flex-1 items-center justify-center ml-[10em]">
-              <ul className="flex gap-6">
-                {navItems.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "text-md font-medium transition-colors hover:text-primary",
-                        pathname === item.href
-                          ? "text-primary"
-                          : "text-muted-foreground"
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+        )
+      }
 
-            {/* Desktop login button */}
-            {userEmail ? (
-              <div className="absolute right-5 flex space-x-2 items-center md:flex ml-auto">
-                <Link href={`/dashboard/${userEmail}`}>
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </Link>
-
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="bg-[#437A45] text-white rounded-full p-[1.2em]"
-                  onClick={logout}
-                >
-                  <div>
-                    <LogOut />
-                  </div>
-                </Button>
-              </div>
-            ) : (
-              <div className="absolute right-5 flex items-center md:flex ml-auto">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="bg-[#437A45] text-white"
-                >
-                  <Link href="/auth/login">Login</Link>
-                </Button>
-              </div>
-            )}
-
-            {/* Mobile navigation */}
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+<Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon" className="ml-auto">
                   <Menu className="h-5 w-5" />
@@ -188,20 +181,27 @@ export default function Section1() {
                 </nav>
               </SheetContent>
             </Sheet>
-          </div>
-        </header>
+
+    </header>
         {/* section 1 */}
         <div>
           {/* rounded button */}
           <div className="text-[#437A45] text-center text-md mt-20 rounded-3xl border border-[#437A45] w-[30%] mx-auto p-2">
             Smarter Property Decision with Artificial Intelligence
           </div>
-          <div className="text-6xl w-1/2 text-center mx-auto mt-10 font-semibold tracking-tight">
-            AI Powered Property Investment Platform
+          <div className="text-6xl w-1/2 text-center mx-auto mt-10 font-semibold tracking-tight flex flex-col space-y-1">
+          <span>Real Estate</span>
+          <span>Vertical AI Agent</span>
           </div>
-          <div className="text-xl w-1/2 text-center mx-auto mt-16 font-light tracking-tight">
-            Realtor AI transforms real estate data into actionable insights,
-            helping you make smarter property decisions.
+          <div className="text-xl w-1/2 text-center mx-auto mt-8 font-light tracking-tight">
+            <p>
+              Realtor AI is a vertical AI agent that helps you make smarter
+              property decisions.
+            </p>
+            <p>
+              We provide you with the best property insights, market trends, and
+              AI predictions.
+            </p>
           </div>
           <div>
             <div className="flex justify-center mt-10">
@@ -214,7 +214,7 @@ export default function Section1() {
               </Button>
             </div>
           </div>
-          <div className="flex justify-center mt-20 space-x-10 mx-auto">
+          <div className="flex justify-center mt-20 space-x-10 mx-[10%]">
             {[0, 1, 2].map((i) => (
               <PointProps
                 key={i}

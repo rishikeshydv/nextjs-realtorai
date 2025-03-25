@@ -17,6 +17,7 @@ export default function Logs() {
   }, []);
   const navItems = [
     { name: "Home", href: "/" },
+    { name: "Insights", href: "/about" },
     { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
@@ -38,10 +39,14 @@ export default function Logs() {
   };
   return (
     <div>
-      <div className="container flex h-16 items-center">
+      <div className="w-full py-4 px-6 flex items-center justify-between">
+      <Link href="/" className="flex items-center space-x-2">
+      {/* <img src="/logo/logo.png" alt="" className="h-auto w-[5em]" /> */}
+      </Link>
+
         {/* Desktop navigation */}
-        <nav className="hidden md:flex md:flex-1 items-center justify-center ml-[10em]">
-          <ul className="flex flex-wrap items-center gap-3">
+        <nav className="hidden md:flex space-x-4">
+          <ul className="flex gap-6 justify-center">
             {navItems.map((item) => (
               <li key={item.name} className="relative">
                 <Link
@@ -66,39 +71,35 @@ export default function Logs() {
         </nav>
 
         {/* Desktop login button */}
-        {userEmail ? (
-          <div className="absolute right-5 flex space-x-2 items-center md:flex ml-auto">
-            <Link href="/dashboard">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </Link>
+        {
+        userEmail ? (
+          <div className="flex space-x-2 items-center">
+          <Link href={`/dashboard/${userEmail}`}>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
 
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="bg-[#437A45] text-white rounded-full p-[1.2em]"
-              onClick={logout}
-            >
-              <div>
-                <LogOut />
-              </div>
-            </Button>
-          </div>
-        ) : (
-          <div className="absolute right-5 flex items-center md:flex ml-auto">
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="bg-[#437A45] text-white"
-            >
-              <Link href="/auth/login">Login</Link>
-            </Button>
-          </div>
-        )}
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="bg-[#437A45] text-white rounded-full p-[1.2em]"
+            onClick={logout}
+          >
+            <div>
+              <LogOut />
+            </div>
+          </Button>
+        </div>
+        ):(
+          <Button variant="outline" className="bg-[#437A45] text-white">
+          <Link href="/auth/login">Login</Link>
+          </Button>
+
+        )
+      }
 
         {/* Mobile navigation */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
