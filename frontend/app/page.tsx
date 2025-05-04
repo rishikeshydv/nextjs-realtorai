@@ -1,7 +1,6 @@
 "use client";
 
 import Section1 from '@/components/homepage/Section1';
-import Sec7 from '@/components/Footer';
 
 export default function Home() {
   
@@ -29,7 +28,6 @@ export default function Home() {
     <h1>
       </h1> 
       <Section1 />
-      <Sec7 />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function Calendar() {
   }, []);
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Insights", href: "/about" },
+    { name: "Insights", href: "/insights" },
     { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },

@@ -107,7 +107,7 @@ export default function CalendarView() {
           </div>
         </div>
         {/* calendar */}
-        <div className="pb-6 mb-6 border-b pb-[1.5em]">
+        <div className="pb-6 mb-6 border-b">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -146,7 +146,7 @@ export default function CalendarView() {
           </div>
           <ul className="text-sm space-y-2">
             <li className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-gray-400"></div>
+              <div className="w-3 h-3 rounded-full bg-blue-100"></div>
               <span>Work</span>
             </li>
             <li className="flex items-center gap-2">
@@ -243,7 +243,7 @@ export default function CalendarView() {
           <div className="flex-1 overflow-auto">
             <div className="flex h-[600px] overflow-y-scroll">
               <div className=" w-16 flex flex-col border-gray-200">
-                {[...Array(24)].map((_, hour) => (
+              {Array.from({ length: 13 }, (_, i) => i + 10).map((hour) => (
                   <div
                     key={hour}
                     className="h-24 flex-none border-b border-gray-200 p-1  border-r"
@@ -271,7 +271,7 @@ export default function CalendarView() {
                       startDate + day === todayDate && "bg-gray-100"
                     )}
                   >
-                    {[...Array(24)].map((_, hour) => (
+              {Array.from({ length: 13 }, (_, i) => i + 10).map((hour) => (
                       <div
                         key={hour}
                         className="h-24 border-b border-gray-200"

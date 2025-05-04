@@ -618,15 +618,15 @@ export default function EmailInterface() {
         <div className="p-4 flex items-start gap-4">
           <Avatar className="h-10 w-10">
             <AvatarImage
-              src="/placeholder.svg?height=40&width=40"
+              src="data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3C!--%20License%3A%20PD.%20Made%20by%20Mary%20Akveo%3A%20https%3A%2F%2Fmaryakveo.com%2F%20--%3E%3Csvg%20fill%3D%22%23000000%22%20width%3D%22800px%22%20height%3D%22800px%22%20viewBox%3D%220%200%2024%2024%22%20id%3D%22user%22%20data-name%3D%22Flat%20Color%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22icon%20flat-color%22%3E%3Cpath%20id%3D%22primary%22%20d%3D%22M21%2C20a2%2C2%2C0%2C0%2C1-2%2C2H5a2%2C2%2C0%2C0%2C1-2-2%2C6%2C6%2C0%2C0%2C1%2C6-6h6A6%2C6%2C0%2C0%2C1%2C21%2C20Zm-9-8A5%2C5%2C0%2C1%2C0%2C7%2C7%2C5%2C5%2C0%2C0%2C0%2C12%2C12Z%22%20style%3D%22fill%3A%20rgb(0%2C%200%2C%200)%3B%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E"
               alt="Reid Smith"
             />
             <AvatarFallback>RS</AvatarFallback>
           </Avatar>
 
           <div className="flex-1">
-            <h3 className="text-lg font-semibold">{clickedEmail?.from_name}</h3>
-            <div className="text-sm">{clickedEmail?.from_email}</div>
+            <h3 className="text-lg font-semibold">{clickedEmail?.from_name || emails[0]?.from_name}</h3>
+            <div className="text-sm">{clickedEmail?.from_email || emails[0]?.from_email}</div>
 
             <div className="mt-4 text-sm">
               <div className="flex gap-2 mb-2">
@@ -636,12 +636,12 @@ export default function EmailInterface() {
             </div>
           </div>
 
-          <div className="text-sm text-gray-500">{clickedEmail?.date}</div>
+          <div className="text-sm text-gray-500">{clickedEmail?.date || emails[0]?.date}</div>
         </div>
 
         <div className="p-4 flex-1 overflow-auto">
           <div className="text-sm space-y-4">
-            <p>{clickedEmail?.body}</p>
+            <p>{clickedEmail?.body || emails[0]?.body}</p>
           </div>
         </div>
 

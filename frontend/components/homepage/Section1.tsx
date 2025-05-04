@@ -92,7 +92,7 @@ export default function Section1() {
         <header className="w-full py-4 px-6 flex items-center justify-between">
       {/* Logo */}
       <Link href="/" className="flex items-center space-x-2">
-      <img src="/logo/logo.png" alt="" className="h-auto w-[5em]" />
+      <img src="/logo/logo.png" alt="" className="h-auto w-[4em]" />
       </Link>
 
       {/* Navigation */}

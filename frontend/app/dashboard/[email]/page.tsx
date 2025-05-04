@@ -17,6 +17,7 @@ export default function Dashboard() {
   }, []);
   const navItems = [
     { name: "Home", href: "/" },
+    { name: "Insights", href: "/insights" },
     { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
