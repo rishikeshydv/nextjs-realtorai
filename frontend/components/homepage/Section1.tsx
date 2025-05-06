@@ -9,7 +9,6 @@ import { Menu, Search, LogOut } from "lucide-react";
 import PointProps from "./PointProps";
 import WhyProps from "./WhyProps";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 export default function Section1() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -21,7 +20,6 @@ export default function Section1() {
    // { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
-    { name: "Logbook", href: "/logs" },
   ];
 
   const PointImgUrls = [
@@ -120,12 +118,6 @@ export default function Section1() {
       {
         userEmail ? (
           <div className="flex space-x-2 items-center">
-          <Link href={`/dashboard/${userEmail}`}>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </Link>
 
           <Button
             asChild
@@ -226,8 +218,8 @@ export default function Section1() {
           </div>
         </div>
         {/* section 2 */}
-        <div className="flex justify-center items-center">
-          <img src="/homepage/HomeSample.png" alt="" />
+        <div className="flex justify-center items-center px-[10%] py-10">
+          <img src="/bgs/ss.png" alt="" />
         </div>
         {/* section 3 */}
         <div className="px-6 py-32 bg-gray-100">

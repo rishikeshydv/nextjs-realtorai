@@ -34,7 +34,7 @@ export async function POST(req: Request):Promise<NextResponse> {
 
 
   console.log(allPropertyRows.rowCount)
-  allPropertyRows.rows.forEach((row) => {
+  allPropertyRows.rows.forEach((row: { zp_id: string; street: string; city: string; state: string; zip: string }) => {
     res.push({
         zp_id: row.zp_id,
         details: {
@@ -55,7 +55,7 @@ export async function POST(req: Request):Promise<NextResponse> {
 
 
   if (allPropertyRows.rowCount !== null && allPropertyRows.rowCount > 0) {
-    const propertyIds = allPropertyRows.rows.map((row) => row.zp_id);
+    const propertyIds: string[] = allPropertyRows.rows.map((row: { zp_id: string }) => row.zp_id);
     const propertyIdsString = propertyIds.map((id) => `'${id}'`).join(",");
 
         //now we get full_market_value from assessment_information and that would be the price
@@ -63,7 +63,7 @@ export async function POST(req: Request):Promise<NextResponse> {
         const price = await pool.query(
             `SELECT zp_id,price FROM deep_scrape WHERE zp_id IN (${propertyIdsString})`
         );
-        price.rows.forEach((row) => {
+        price.rows.forEach((row: { zp_id: string; price: string }) => {
             const property = res.find((p) => p.zp_id === row.zp_id);
             if (property) {
                 //check if price is between min and max
@@ -82,7 +82,7 @@ export async function POST(req: Request):Promise<NextResponse> {
         const bedrooms = await pool.query(
             `SELECT zp_id,bedrooms,full_baths,year_built FROM building_information_left WHERE zp_id IN (${propertyIdsString})`
         );
-        bedrooms.rows.forEach((row) => {
+        bedrooms.rows.forEach((row: { zp_id: string; bedrooms: string; full_baths: string; year_built: string }) => {
             const property = res.find((p) => p.zp_id === row.zp_id);
             if (property) {
                 const bedrooms = Number(row.bedrooms);
@@ -103,7 +103,7 @@ export async function POST(req: Request):Promise<NextResponse> {
         const sqft = await pool.query(
             `SELECT zp_id,total_sqft FROM building_information_right WHERE zp_id IN (${propertyIdsString})`
         );
-        sqft.rows.forEach((row) => {
+        sqft.rows.forEach((row: { zp_id: string; total_sqft: string }) => {
             const property = res.find((p) => p.zp_id === row.zp_id);
             if (property) {
                 const sqft = Number(row.total_sqft.replace(",", ""));
@@ -122,7 +122,7 @@ export async function POST(req: Request):Promise<NextResponse> {
             `SELECT zp_id,img_url FROM ownership_info WHERE zp_id IN (${propertyIdsString})`
         );
         //only push images, if the property qualifies
-        image.rows.forEach((row) => {
+        image.rows.forEach((row: { zp_id: string; img_url: string }) => {
             const property = res.find((p) => p.zp_id === row.zp_id);
             if (property && property.qualify) {
                 property.details.image = row.img_url;

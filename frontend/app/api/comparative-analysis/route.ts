@@ -124,7 +124,7 @@ function getCrimeScore(street:string): Promise<number> {
     const query = `SELECT scaled_crime_score FROM crime_score WHERE street = $1`;
     const values = [mappedStreet];
     return pool.query(query, values)
-        .then((result) => {
+        .then((result: { rows: { scaled_crime_score: number }[] }) => {
             if (result.rows.length > 0) {
                 return result.rows[0].scaled_crime_score;
             } else {
@@ -132,9 +132,4 @@ function getCrimeScore(street:string): Promise<number> {
             }
         }
     )
-        .catch((error) => {
-            console.error("Error fetching crime score:", error);
-            throw error;
-        }
-    );
 }

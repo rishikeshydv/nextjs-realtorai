@@ -77,7 +77,20 @@ LEFT JOIN LATERAL (
 
     const result = await pool.query(query, [userEmail]);
 
-    const res: Property[] = result.rows.map((row) => ({
+    const res: Property[] = result.rows.map((row: {
+      zp_id: string;
+      img_url: string;
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+      price: string | number | null;
+      predicted_price: string | number | null;
+      roi: string | number | null;
+      arv: string | number | null;
+      walkscore: string | number | null;
+      market_values: string[];
+    }) => ({
       id: row.zp_id,
       image: row.img_url ?? "",
       name: row.street ?? "Unknown",

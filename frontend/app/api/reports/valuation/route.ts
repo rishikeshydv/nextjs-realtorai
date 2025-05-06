@@ -35,7 +35,13 @@ export async function POST(request:Request){
             return NextResponse.json({ message: "No data found" }, { status: 404 });
         }
         const valuationHistory:ValuationType[] = []
-        rows.forEach((row) => {
+        rows.forEach((row:{
+            year: string;
+            assessment_value: string;
+            market_value: string;
+            tax_value_paid: string;
+            tax_paid_date: string;
+        }) => {
             valuationHistory.push({
                 year: ParsePrice(row.year),
                 assessmentValue: ParsePrice(row.assessment_value),

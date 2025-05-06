@@ -8,7 +8,7 @@ interface InspectionData {
   }
 export async function POST(request: Request): Promise<NextResponse> {
     const { zp_id } = await request.json();
-    const rows = await pool.query(
+    const rows = await pool.query<{ completion_date: string; result: string; inspector_name: string; inspector_comments: string }>(
         `SELECT * FROM general_inspections WHERE zp_id = $1`,
         [zp_id]
     );
@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         return NextResponse.json({ message: "No general inspections found for given zp_id" }, { status: 404 });
     }
 
-    const res : InspectionData[] = rows.rows.map((record) => {
+    const res : InspectionData[] = rows.rows.map((record: { completion_date: string; result: string; inspector_name: string; inspector_comments: string }) => {
         const date = record.completion_date;
         const result = record.result;
         const inspectorName = record.inspector_name;

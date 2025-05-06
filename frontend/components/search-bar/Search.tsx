@@ -24,7 +24,7 @@ import FilterZipCity from "@/queries/FilterZipCity";
 import axios from "axios";
 declare global {
   interface Window {
-    google: typeof google;
+    google: typeof google | undefined;
   }
 }
 interface PropertyDetails{

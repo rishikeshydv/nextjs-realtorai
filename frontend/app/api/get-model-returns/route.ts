@@ -47,7 +47,16 @@ export async function POST(request: Request): Promise<NextResponse> {
       console.log("No data found for the given zp_id");
       return NextResponse.json({"data":[]});
     }
-    const formatted: ReturnType[] = result.rows.map(row => ({
+    interface QueryResultRow {
+        zp_id: string;
+        predicted_price: string;
+        sales_probability: string;
+        roi: string;
+        arv: string;
+        monthly_payment: string;
+    }
+    
+    const formatted: ReturnType[] = result.rows.map((row: QueryResultRow) => ({
       zp_id: row.zp_id,
       predicted_price: priceFormatter(row.predicted_price),
       sales_probability: row.sales_probability,

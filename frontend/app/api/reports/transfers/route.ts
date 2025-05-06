@@ -1,6 +1,17 @@
 import pool from "@/prisma/pool";
 import { NextResponse } from "next/server";
 
+type TransferHistoryRow = {
+    sale_date: string;
+    sale_price: string;
+    useable_sale: string;
+    arms_length: string;
+    prior_owner: string;
+    deed_book: string;
+    deed_page: string;
+    deed_date: string;
+}
+
 export async function POST(request: Request) {
     const {zp_id} = await request.json();
     const rows = await pool.query(
@@ -17,7 +28,7 @@ export async function POST(request: Request) {
     // deedBook: string;
     // deedPage: string;
     // deedDate: string;
-    const transfers = rows.rows.map((row) => ({
+    const transfers = rows.rows.map((row:TransferHistoryRow) => ({
         saleDate: row.sale_date,
         salePrice: parsePrice(row.sale_price),
         priorOwner: row.prior_owner,

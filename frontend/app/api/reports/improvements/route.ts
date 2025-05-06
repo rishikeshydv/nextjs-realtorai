@@ -10,7 +10,17 @@ export async function POST(request: Request) {
     if (rows.rowCount === 0) {
         return NextResponse.json({ message: "No data found" }, { status: 404 });
     }
-    const improvements = rows.rows.map((row) => ({
+    const improvements = rows.rows.map((row:{
+        zp_id: string;
+        site: string;
+        description: string;
+        quantity: string;
+        condition: string;
+        year_built: number;
+        sqft: number;
+        dimensions: string;
+
+    }) => ({
         info: formatPropertyType(row.description),
         condition: formatPropertyType(row.condition),
         yearBuilt: row.year_built,
@@ -21,6 +31,7 @@ export async function POST(request: Request) {
         improvementList: improvements,
     });
 }
+
 
 function formatPropertyType(input: string): string {
     const parts = input.split("-");

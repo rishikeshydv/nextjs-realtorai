@@ -2,6 +2,17 @@ import pool from "@/prisma/pool";
 import { NextResponse } from "next/server";
 import GetCrimeCategory from "@/mappings/crime_mappings";
 
+interface PoliceRecord {
+  case_number: string;
+  incident_date_time: string;
+  incident_type: string;
+  incident_description: string;
+  street: string;
+  city: string;
+  state: string;
+  zipcode: string;
+}
+
 export async function POST(request: Request): Promise<NextResponse> {
   const { zp_id } = await request.json();
 
@@ -32,7 +43,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   const cutoffDate = new Date("2020-01-01");
 
   const res: { date: Date; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" }[] = police_records.rows
-    .map((record) => {
+    .map((record:PoliceRecord) => {
         const [dateStr, ...timeParts] = record.incident_date_time.split(" ");
         const time = timeParts.join(" "); // "02:32:57 AM"
       const date = new Date(dateStr);
@@ -45,8 +56,8 @@ export async function POST(request: Request): Promise<NextResponse> {
         type: GetCrimeCategory(record.incident_type) as "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" || "Theft",
       };
     })
-    .filter((incident): incident is { date: Date; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" } => incident !== null && incident.date >= cutoffDate) // filter by date
-    .sort((a, b) => b.date.getTime() - a.date.getTime()); // sort by newest
+    .filter((incident: { date: Date | null; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" } | null): incident is { date: Date; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" } => incident !== null && incident.date !== null && incident.date >= cutoffDate) // filter by date
+    .sort((a: { date: Date; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" }, b: { date: Date; time: string; type: "Theft" | "Burglary" | "Assault" | "Sexual Assault" | "Killing" }) => b.date.getTime() - a.date.getTime()); // sort by newest
 
   return NextResponse.json({ incidents: res });
 }

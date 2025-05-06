@@ -16,6 +16,7 @@ import {
   ImageIcon,
   Link,
   Loader2,
+  VideoIcon
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,14 +27,17 @@ import axios from "axios";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { SendEmailRequest } from "@/types/email";
+
 
 export default function EmailInterface() {
   const [selectedEmail, setSelectedEmail] = useState<number>(0);
@@ -73,6 +77,48 @@ export default function EmailInterface() {
   }, [clickedEmail]);
 
   console.log(aiGeneratedResponse);
+
+  //google meet
+
+    //meeting create info
+  const [receipient, setRecipient] = useState("john.doe@gmail.com");
+  const [subject_, setSubject_] = useState("Meeting");
+  const [startTime, setStartTime] = useState("10:00");
+  const [endTime, setEndTime] = useState("11:00");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+  //meeting ui change
+  const [buttonText, setButtonText] = useState("Confirm Meeting");
+  const [buttonCSS, setButtonCSS] = useState("bg-black text-white");
+
+    //confirm meeting
+    async function ConfirmMeeting() {
+      console.log(receipient, subject, startTime, endTime, date);
+      const res = await fetch("/api/addMeeting", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          receipient,
+          subject,
+          start_time: startTime,
+          end_time: endTime,
+          date,
+        }),
+      });
+      console.log(res);
+      const responseBody = await res.json();
+      if (responseBody.message === "Meeting Created") {
+        setButtonText("Meeting Created");
+        setButtonCSS("bg-[#437A45] text-white hover:bg-[#437A45]/90");
+      } else {
+        setButtonText("Error Occured");
+        setButtonCSS("bg-red-500 text-white hover:bg-red-500/90");
+      }
+    }
+  
+
 
   //compose email UI
   const [composeOpen, setComposeOpen] = useState(false);
@@ -601,6 +647,82 @@ export default function EmailInterface() {
               <Forward className="h-4 w-4" />
               <span>Forward</span>
             </Button>
+
+            <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant={"outline"} className="border-none outline-none shadow-none">
+                    <VideoIcon className="h-4 w-4" />
+                    Create
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Meeting Information</DialogTitle>
+                    <DialogDescription>
+                      Add your meeting information below.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="receipient" className="text-right">
+                        Receipient
+                      </Label>
+                      <Input
+                        id="receipient"
+                        type="email"
+                        value={receipient}
+                        onChange={(e) => setRecipient(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="subject" className="text-right">
+                        Subject
+                      </Label>
+                      <Input
+                        id="subject"
+                        value={subject_}
+                        onChange={(e) => setSubject_(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                      />
+                      To
+                      <Input
+                        type="time"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="date" className="text-right">
+                        Date
+                      </Label>
+                      <Input
+                        id="date"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      onClick={async () => await ConfirmMeeting()}
+                      className={buttonCSS}
+                    >
+                      {buttonText}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            
             <Button
               variant="ghost"
               size="sm"
@@ -799,11 +921,11 @@ export default function EmailInterface() {
                     }}
                   >
                     <p className="font-medium mb-1">
-                      Thanks for sharing about Julie&apos;s experience!
+                    Acknowledgment / Confirmation
                     </p>
                     <p className="text-gray-600">
-                      It&apos;s great to hear she&apos;s enjoying the platform.
-                      I&apos;d love to hear more about her specific use case.
+                    Thanks for your email. I&apos;ve received your message and will get back to you shortly with more details.
+                    Please feel free to reach out if you have any further questions in the meantime.
                     </p>
                   </button>
 
@@ -822,12 +944,11 @@ export default function EmailInterface() {
                     }}
                   >
                     <p className="font-medium mb-1">
-                      Feature Julie in our success stories?
+                    General Follow-up / Next Steps
                     </p>
                     <p className="text-gray-600">
-                      Would Julie be interested in being featured in our
-                      customer success stories? We&apos;re always looking for
-                      great examples.
+                    Thank you for the update. That sounds good to me. Let&apos;s proceed as discussed.
+                    If anything changes or if you need additional input from my side, just let me know.
                     </p>
                   </button>
 
@@ -845,11 +966,10 @@ export default function EmailInterface() {
                       }
                     }}
                   >
-                    <p className="font-medium mb-1">Schedule a support call</p>
+                    <p className="font-medium mb-1">Polite Decline / Unavailable</p>
                     <p className="text-gray-600">
-                      Let&apos;s schedule a call to discuss how we can support
-                      Julie&apos;s business further and ensure she&apos;s
-                      getting the most out of our platform.
+                    I appreciate your message and the opportunity. Unfortunately, I&apos;m unable to commit to this at the moment.
+                    I hope we can find another chance to collaborate in the future.
                     </p>
                   </button>
 
@@ -868,12 +988,11 @@ export default function EmailInterface() {
                     }}
                   >
                     <p className="font-medium mb-1">
-                      Share with our product team
+                    Interest / Positive Response
                     </p>
                     <p className="text-gray-600">
-                      I&apos;ll share Julie&apos;s experience with our product
-                      team. If she has any specific feature requests or
-                      suggestions, please let us know.
+                    Thanks for reaching out! I&apos;m definitely interested and would love to explore this further.
+                    Let me know how you&apos;d like to proceed or if there&apos;s anything you need from me to get started.
                     </p>
                   </button>
 
@@ -892,12 +1011,11 @@ export default function EmailInterface() {
                     }}
                   >
                     <p className="font-medium mb-1">
-                      Consider a referral program
+                    Need More Time / Info
                     </p>
                     <p className="text-gray-600">
-                      We should consider offering a referral program for
-                      customers like Julie who are enthusiastic about Dappr and
-                      already recommending it.
+                    Thanks for your message. I&apos;m currently reviewing the details and will need a bit more time to give you a thorough response.
+                    I&apos;ll follow up as soon as I have more clarity. Appreciate your patience.
                     </p>
                   </button>
                 </div>

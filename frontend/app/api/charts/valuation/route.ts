@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import pool from "@/prisma/pool";
+interface Valuation {
+    year: string;
+    market_value: string;
+    tax_value_paid: string;
+}
 export async function POST(request: Request): Promise<NextResponse> {
     const res: { year: string[]; market_value: string[]; tax_value_paid: string[] } = {
         year: [],
@@ -18,7 +23,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             query,
             values
         )
-        allRows.rows.forEach((row) => {
+        allRows.rows.forEach((row:Valuation) => {
             res.year.push(row.year);
             res.market_value.push(row.market_value);
             res.tax_value_paid.push(row.tax_value_paid);

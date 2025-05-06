@@ -45,7 +45,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     const propertyMap: Record<string, ReturnPropertyDetails> = {};
 
-    allPropertyRows.rows.forEach((row) => {
+    allPropertyRows.rows.forEach((row: { zp_id: string; bedrooms: number; full_baths: number; year_built: number }) => {
       propertyMap[row.zp_id] = {
         zp_id: row.zp_id,
         details: {
@@ -73,7 +73,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       `SELECT zp_id,price FROM deep_scrape WHERE zp_id IN (${propertyIdsString})`
     );
 
-    price.rows.forEach((row) => {
+    price.rows.forEach((row: { zp_id: string; price: string }) => {
       const property = propertyMap[row.zp_id];
       if (property) {
         const marketValue = Number(row.price.slice(1).replace(/,/g, ""));
@@ -85,7 +85,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         const addresses = await pool.query(
         `SELECT zp_id, street, city, state, zip FROM initial_data_for_sale WHERE zp_id IN (${propertyIdsString})`
         );
-        addresses.rows.forEach((row) => {
+        addresses.rows.forEach((row: { zp_id: string; street: string; city: string; state: string; zip: string }) => {
         const property = propertyMap[row.zp_id];
         if (property) {
             // Ensure each field is available
@@ -102,7 +102,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     const sqft = await pool.query(
       `SELECT zp_id,total_sqft FROM building_information_right WHERE zp_id IN (${propertyIdsString})`
     );
-    sqft.rows.forEach((row) => {
+    sqft.rows.forEach((row: { zp_id: string; total_sqft: string }) => {
       const property = propertyMap[row.zp_id];
       if (property) {
         const sqftValue =Number(row.total_sqft.replace(",", ""));
@@ -117,7 +117,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       `SELECT zp_id,img_url FROM ownership_info WHERE zp_id IN (${propertyIdsString})`
     );
     //only push images, if the property qualifies
-    image.rows.forEach((row) => {
+    image.rows.forEach((row: { zp_id: string; img_url: string }) => {
       const property = propertyMap[row.zp_id];
       if (property && property.qualify) {
         property.details.image = row.img_url;

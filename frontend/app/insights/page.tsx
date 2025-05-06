@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // import { SpotlightOld } from "@/components/ui/spotlight";
 interface PropertyDetails{
   zp_id: string;
@@ -100,10 +99,8 @@ export default function Insights() {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Insights", href: "/insights" },
-    { name: "Dashboard", href: `/dashboard/${userEmail}` },
     { name: "Email", href: "/email" },
     { name: "Calendar", href: "/calendar" },
-    { name: "Logbook", href: "/logs" },
   ];
   const pathname = usePathname();
     const [isOpen, setIsOpen] = React.useState(false);
@@ -172,13 +169,6 @@ export default function Insights() {
         {
         userEmail ? (
           <div className="flex space-x-2 items-center">
-          <Link href={`/dashboard/${userEmail}`}>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </Link>
-
           <Button
             asChild
             variant="outline"

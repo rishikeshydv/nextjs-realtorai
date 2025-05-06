@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   try {
     const imageList: PropertyImage[] = [];
-    rows.rows.forEach((row) => {
+    rows.rows.forEach((row: { url: string | null }) => {
       const imageUrl = row.url;
       if (imageUrl) {
         imageList.push({ src: imageUrl });
