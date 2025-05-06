@@ -66,7 +66,7 @@ export default function EmailInterface() {
   useEffect(() => {
     if (clickedEmail) {
       axios
-        .post("http://localhost:5002/api/v1/airesponse", clickedEmail)
+        .post("http://10.0.0.2:5002/api/v1/airesponse", clickedEmail)
         .then((res) => {
           setAiGeneratedResponse(res.data.response);
         })
@@ -77,8 +77,6 @@ export default function EmailInterface() {
   }, [clickedEmail]);
 
   console.log(aiGeneratedResponse);
-
-  //google meet
 
     //meeting create info
   const [receipient, setRecipient] = useState("john.doe@gmail.com");
@@ -138,7 +136,7 @@ export default function EmailInterface() {
       body: body,
     };
     axios
-      .post("http://localhost:5002/api/v1/sendemail", NewReq)
+      .post("http://10.0.0.2:5002/api/v1/sendemail", NewReq)
       .then((res) => {
         console.log(res.data);
         setComposeOpen(false);
@@ -162,7 +160,7 @@ export default function EmailInterface() {
       body: body,
     };
     axios
-      .post("http://localhost:5002/api/v1/sendemail", NewReq)
+      .post("http://10.0.0.2:5002/api/v1/sendemail", NewReq)
       .then((res) => {
         console.log(res.data);
         setComposeOpen(false);
@@ -187,7 +185,7 @@ export default function EmailInterface() {
   //get all the emails
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/v1/getemails")
+      .get("http://10.0.0.2:5002/api/v1/getemails")
       .then((res) => {
         setEmails(res.data.emails);
       })

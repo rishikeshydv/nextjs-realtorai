@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     end_time,   
     date,
   })
-  const res = await axios.post("http://localhost:5002/api/v1/addmeeting", {
+  const res = await axios.post("http://10.0.0.2:5002/api/v1/addmeeting", {
     receipient,
     subject,
     start_time,
