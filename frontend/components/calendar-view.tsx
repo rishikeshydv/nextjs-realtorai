@@ -1,28 +1,50 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Search,
-  MoreHorizontal,
-  X,
-  Clock,
-  Users,
-  Link,
-  AlignLeft,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, VideoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SiGooglecalendar } from "react-icons/si";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+
+interface MeetingInfo {
+  summary: string;
+  date: string;
+  start: string;
+  end: string;
+  uri: string;
+}
 
 export default function CalendarView() {
-  const [showAddEvent, setShowAddEvent] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+
+  //meeting create info
+  const [receipient, setRecipient] = useState("john.doe@gmail.com");
+  const [subject, setSubject] = useState("Meeting");
+  const [startTime, setStartTime] = useState("10:00");
+  const [endTime, setEndTime] = useState("11:00");
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+  //meeting ui change
+  const [buttonText, setButtonText] = useState("Confirm Meeting");
+  const [buttonCSS, setButtonCSS] = useState("bg-black text-white");
+
+  //all meetings
+  const [allMeetings, setAllMeetings] = useState<MeetingInfo[]>([]);
 
   const intToMonth: { [key: number]: string } = {
     0: "January",
@@ -94,6 +116,64 @@ export default function CalendarView() {
       setPreviousWeek(false);
     }
   }, [nextWeek, previousWeek]);
+
+  //confirm meeting
+  async function ConfirmMeeting() {
+    console.log(receipient, subject, startTime, endTime, date);
+    const res = await fetch("/api/addMeeting", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        receipient,
+        subject,
+        start_time: startTime,
+        end_time: endTime,
+        date,
+      }),
+    });
+    console.log(res);
+    const responseBody = await res.json();
+    if (responseBody.message === "Meeting Created") {
+      setButtonText("Meeting Created");
+      setButtonCSS("bg-[#437A45] text-white hover:bg-[#437A45]/90");
+    } else {
+      setButtonText("Error Occured");
+      setButtonCSS("bg-red-500 text-white hover:bg-red-500/90");
+    }
+  }
+
+  //get all meetings
+  async function GetMeetings() {
+    const res = await fetch("/api/getMeeting", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const responseBody = await res.json();
+    if (responseBody.message === "Meeting Received") {
+      setAllMeetings(responseBody.meetings);
+    }
+  }
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      await GetMeetings();
+    };
+    fetchMeetings();
+  }, []);
+
+  // Group meetings by date
+  const eventsByDay = allMeetings.reduce(
+    (acc: { [key: string]: MeetingInfo[] }, meeting) => {
+      const meetingDate = new Date(meeting.date).toDateString();
+      acc[meetingDate] ||= [];
+      acc[meetingDate].push(meeting);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="flex h-screen">
@@ -188,15 +268,82 @@ export default function CalendarView() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button className="p-1">
-              <Search className="h-4 w-4" />
-            </button>
-            <button className="p-1">
-              <Clock className="h-4 w-4" />
-            </button>
-            <button className="p-1">
-              <MoreHorizontal className="h-4 w-4" />
-            </button>
+            <div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant={"outline"}>
+                    <VideoIcon className="h-4 w-4" />
+                    Create
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Meeting Information</DialogTitle>
+                    <DialogDescription>
+                      Add your meeting information below.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="receipient" className="text-right">
+                        Receipient
+                      </Label>
+                      <Input
+                        id="receipient"
+                        type="email"
+                        value={receipient}
+                        onChange={(e) => setRecipient(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="subject" className="text-right">
+                        Subject
+                      </Label>
+                      <Input
+                        id="subject"
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Input
+                        type="time"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                      />
+                      To
+                      <Input
+                        type="time"
+                        value={endTime}
+                        onChange={(e) => setEndTime(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="date" className="text-right">
+                        Date
+                      </Label>
+                      <Input
+                        id="date"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      onClick={async () => await ConfirmMeeting()}
+                      className={buttonCSS}
+                    >
+                      {buttonText}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
             <div className="flex bg-gray-100 border-l border-gray-200 pl-2 ml-2 rounded-xl p-1">
               <button className="px-2 py-1 text-sm">Day</button>
               <button className="px-2 py-1 text-sm bg-white rounded">
@@ -243,7 +390,7 @@ export default function CalendarView() {
           <div className="flex-1 overflow-auto">
             <div className="flex h-[600px] overflow-y-scroll">
               <div className=" w-16 flex flex-col border-gray-200">
-              {Array.from({ length: 13 }, (_, i) => i + 10).map((hour) => (
+                {Array.from({ length: 13 }, (_, i) => i + 10).map((hour) => (
                   <div
                     key={hour}
                     className="h-24 flex-none border-b border-gray-200 p-1  border-r"
@@ -263,184 +410,70 @@ export default function CalendarView() {
 
               <div className="flex-1 grid grid-cols-7 relative">
                 {/* Time slots for each day */}
-                {[0, 1, 2, 3, 4, 5, 6].map((day) => (
-                  <div
+                {[0, 1, 2, 3, 4, 5, 6].map((day) => {
+                  const currentDate = new Date(year, month, startDate + day);
+                  const currentDateString = currentDate.toDateString();
+                  const meetingsOnThisDay =
+                    eventsByDay[currentDateString] || [];
+
+                  return (
+                    <div
                     key={day}
                     className={cn(
-                      "border-r border-gray-200",
-                      startDate + day === todayDate && "bg-gray-100"
+                      "border-r border-gray-200 relative", // Make this relative for absolute positioning of events
+                      currentDateString === today.toDateString() && "bg-gray-100"
                     )}
                   >
-              {Array.from({ length: 13 }, (_, i) => i + 10).map((hour) => (
-                      <div
-                        key={hour}
-                        className="h-24 border-b border-gray-200"
-                      ></div>
-                    ))}
-                  </div>
-                ))}
+                      {meetingsOnThisDay.map((meeting) => {
+                        const start = new Date(
+                          `${meeting.date}T${meeting.start}`
+                        );
+                        const end = new Date(`${meeting.date}T${meeting.end}`);
+                        const startHour = start.getHours();
 
-                {/* Events */}
-                <div className="absolute top-[30px] left-[calc(16.67%+8px)] w-[calc(16.67%-16px)] h-16 bg-purple-100 rounded p-1 text-xs">
-                  <div className="text-purple-800 font-medium">
-                    Jane Feedback
-                  </div>
-                  <div className="text-purple-600 text-[10px]">
-                    8:30am - 9:30am
-                  </div>
-                </div>
+                        // Only render if the meeting falls within the displayed hour range (10 AM - 10 PM)
+                        if (startHour >= 10 && startHour < 23) {
+                          const topOffsetPercentage =
+                            (((startHour - 10) * 60 + start.getMinutes()) /
+                              780) *
+                            100; // 780 minutes from 10 AM to 11 PM
+                          const durationMinutes =
+                            (end.getTime() - start.getTime()) / (1000 * 60);
+                          const heightPercentage =
+                            (durationMinutes / 60 / 13) * 200; // Relative to 13 hours
 
-                <div className="absolute top-[30px] left-[calc(33.33%+8px)] w-[calc(16.67%-16px)] h-24 bg-green-100 rounded p-1 text-xs">
-                  <div className="text-green-800 font-medium">
-                    Feedback Kappa Project
-                  </div>
-                  <div className="text-green-600 text-[10px]">
-                    8:30am - 10:00am
-                  </div>
-                </div>
-
-                <div className="absolute top-[80px] left-[calc(33.33%+8px)] w-[calc(16.67%-16px)] h-16 bg-green-100 rounded p-1 text-xs">
-                  <div className="text-green-800 font-medium">
-                    Meet with Anne
-                  </div>
-                  <div className="text-green-600 text-[10px]">
-                    9:00am - 9:30am
-                  </div>
-                </div>
-
-                <div className="absolute top-[30px] left-[calc(50%+8px)] w-[calc(16.67%-16px)] h-16 bg-blue-100 rounded p-1 text-xs">
-                  <div className="text-blue-800 font-medium">Design System</div>
-                  <div className="text-blue-600 text-[10px]">
-                    8:30am - 9:30am
-                  </div>
-                </div>
-
-                <div className="absolute top-[30px] left-[calc(83.33%+8px)] w-[calc(16.67%-16px)] h-16 bg-blue-100 rounded p-1 text-xs">
-                  <div className="text-blue-800 font-medium">
-                    Adie&apos;s Birthday
-                  </div>
-                  <div className="text-blue-600 text-[10px]">
-                    8:30am - 9:30am
-                  </div>
-                </div>
-
-                <div className="absolute top-[120px] left-[calc(50%+8px)] w-[calc(16.67%-16px)] h-16 bg-blue-100 rounded p-1 text-xs">
-                  <div className="text-blue-800 font-medium">
-                    Discuss Hola Project
-                  </div>
-                  <div className="text-blue-600 text-[10px]">
-                    10:00am - 11:00am
-                  </div>
-                </div>
-
-                <div className="absolute top-[168px] left-[calc(33.33%+8px)] w-[calc(16.67%-16px)] h-12 bg-green-100 rounded p-1 text-xs">
-                  <div className="text-green-800 font-medium">Daily Sync</div>
-                  <div className="text-green-600 text-[10px]">
-                    11:00am - 11:30am
-                  </div>
-                </div>
-
-                <div className="absolute top-[168px] left-[calc(50%+8px)] w-[calc(16.67%-16px)] h-12 bg-purple-100 rounded p-1 text-xs">
-                  <div className="text-purple-800 font-medium">Daily Sync</div>
-                  <div className="text-purple-600 text-[10px]">
-                    11:00am - 11:30am
-                  </div>
-                </div>
-
-                <div className="absolute top-[168px] left-[calc(66.67%+8px)] w-[calc(16.67%-16px)] h-24 bg-blue-100 rounded p-1 text-xs">
-                  <div className="text-blue-800 font-medium">
-                    Discuss Animal Project
-                  </div>
-                  <div className="text-blue-600 text-[10px]">
-                    11:00am - 12:00pm
-                  </div>
-                </div>
-
-                <div className="absolute top-[168px] left-[calc(83.33%+8px)] w-[calc(16.67%-16px)] h-12 bg-blue-100 rounded p-1 text-xs">
-                  <div className="text-blue-800 font-medium">Break</div>
-                  <div className="text-blue-600 text-[10px]">
-                    11:30am - 12:00pm
-                  </div>
-                </div>
-
-                <div className="absolute top-[168px] left-[calc(66.67%+8px)] w-[calc(16.67%-16px)] h-12 bg-purple-100 rounded p-1 text-xs">
-                  <div className="text-purple-800 font-medium">
-                    Upload Shots
-                  </div>
-                  <div className="text-purple-600 text-[10px]">
-                    11:00am - 11:30am
-                  </div>
-                </div>
+                          return (
+                            <div
+                              key={meeting.uri}
+                              className="absolute left-2 right-2 bg-[#437A45] text-white p-2 rounded-md overflow-hidden text-sm h-full"
+                              style={{
+                                top: `${topOffsetPercentage}%`,
+                                height: `${heightPercentage}%`,
+                              }}
+                            >
+                              <div>
+                              {meeting.summary}
+                              </div>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })}
+                      {Array.from({ length: 13 }, (_, i) => i + 10).map(
+                        (hour) => (
+                            <div
+                            key={`hour-line-${hour}`}
+                              className="h-24 border-b border-gray-200"
+                            ></div>
+                          ))};
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Add Event Modal */}
-      {showAddEvent && (
-        <div className="absolute top-1/4 right-1/4 w-80 bg-white shadow-lg rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between border-b border-gray-200 p-3">
-            <h3 className="font-medium">Add Schedule</h3>
-            <button onClick={() => setShowAddEvent(false)}>
-              <X className="h-4 w-4 text-gray-400" />
-            </button>
-          </div>
-          <div className="p-4">
-            <input
-              type="text"
-              placeholder="Add title"
-              className="w-full border-b border-gray-200 pb-2 mb-4 focus:outline-none"
-              defaultValue="(no title)"
-            />
-
-            <div className="flex items-center mb-4">
-              <div className="w-5 h-5 rounded-full bg-blue-500 flex-shrink-0"></div>
-              <div className="ml-2 flex-1">
-                <div className="text-sm">Wednesday, Jul 12</div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Clock className="h-3 w-3 mr-1" />
-                  <span>9:30am</span>
-                  <span className="mx-2">→</span>
-                  <span>10:00am</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center mb-3 text-sm text-gray-600">
-              <Users className="h-4 w-4 mr-2" />
-              <span>Add guest</span>
-            </div>
-
-            <div className="flex items-center mb-3 text-sm text-blue-600">
-              <Link className="h-4 w-4 mr-2" />
-              <span>https://meet.google.com/...</span>
-            </div>
-
-            <div className="flex items-center mb-4 text-sm text-gray-600">
-              <AlignLeft className="h-4 w-4 mr-2" />
-              <span>Add description</span>
-            </div>
-
-            <div className="flex items-center gap-1 mb-4">
-              <div className="w-5 h-5 rounded-full bg-blue-500"></div>
-              <div className="w-5 h-5 rounded-full bg-green-500"></div>
-              <div className="w-5 h-5 rounded-full bg-yellow-500"></div>
-              <div className="w-5 h-5 rounded-full bg-purple-500"></div>
-              <div className="w-5 h-5 rounded-full bg-gray-200"></div>
-            </div>
-
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowAddEvent(false)}>
-                Cancel
-              </Button>
-              <Button className="bg-blue-600 text-white hover:bg-blue-700">
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

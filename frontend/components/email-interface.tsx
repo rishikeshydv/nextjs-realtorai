@@ -137,9 +137,6 @@ export default function EmailInterface() {
   }, []);
   console.log(userEmail);
 
-  // useEffect(() => {
-  //   setShowDropdown(true);
-  // }, []);
 
   //get all the emails
   useEffect(() => {
@@ -644,46 +641,6 @@ export default function EmailInterface() {
             <p>{clickedEmail?.body || emails[0]?.body}</p>
           </div>
         </div>
-
-        {/* Dropdown menu */}
-        {/* {showDropdown && (
-          <div className="absolute right-4 top-40 bg-white border rounded-md shadow-lg w-64">
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Open</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Reply</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Reply All
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Forward</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Forward & attachment
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Mark as unread
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">
-              Move to Junk
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Mute</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Delete</div>
-            <div className="p-2">
-              <div className="flex items-center gap-1">
-                <span>Star</span>
-                <div className="flex ml-2">
-                  <div className="w-4 h-4 bg-red-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-pink-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-purple-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-blue-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-green-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-yellow-400 rounded-sm"></div>
-                  <div className="w-4 h-4 bg-gray-200 rounded-sm"></div>
-                </div>
-              </div>
-            </div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Archive</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Move to</div>
-            <div className="p-2 hover:bg-gray-100 cursor-pointer">Copy to</div>
-          </div>
-        )} */}
 
         {/* Dialog for Compose Email */}
         <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
